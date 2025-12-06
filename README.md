@@ -12,7 +12,7 @@ So if you provide your starting date and compensation on offer, this application
 - Calculate RSU shares based on grant amount and historical average price
 - Display current RSU value and gain/loss
 - Show total present value of your compensation package
-- **Auto-fetch real-time Meta stock prices** using Alpha Vantage API
+- **Auto-fetch real-time Meta stock prices** using `yahoo-finance2` (No API Key required!)
 - **Auto-calculate historical average** based on your start date
 
 ## Getting Started
@@ -20,7 +20,6 @@ So if you provide your starting date and compensation on offer, this application
 ### Prerequisites
 
 - **Node.js 18+** OR **Bun 1.0+** installed
-- Alpha Vantage API key (free)
 
 ### Installation
 
@@ -28,65 +27,49 @@ So if you provide your starting date and compensation on offer, this application
 
 1. Install Bun if you haven't already:
 
-```bash
+\`\`\`bash
 curl -fsSL https://bun.sh/install | bash
-```
+\`\`\`
 
 2. Install dependencies:
 
-```bash
+\`\`\`bash
 bun install
-```
-
-3. Get a free API key from [Alpha Vantage](https://www.alphavantage.co/support/#api-key)
-
-4. Create a `.env.local` file in the root directory:
-
-```bash
-cp env.example .env.local
-```
-
-5. Add your API key to `.env.local`:
-
-```
-ALPHA_VANTAGE_API_KEY=your_actual_api_key_here
-```
+\`\`\`
 
 #### Option 2: Using npm/yarn
 
 1. Install dependencies:
 
-```bash
+\`\`\`bash
 npm install
 # or
 yarn install
-```
-
-2-5. Follow steps 3-5 from Option 1 above
+\`\`\`
 
 ### Running the Application
 
 #### With Bun (Faster startup!)
 
-```bash
+\`\`\`bash
 # Development Mode
 bun run bun:dev
 
 # Production Mode
 bun run bun:build
 bun run bun:start
-```
+\`\`\`
 
 #### With Node.js/npm
 
-```bash
+\`\`\`bash
 # Development Mode
 npm run dev
 
 # Production Mode
 npm run build
 npm start
-```
+\`\`\`
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
 
@@ -106,10 +89,6 @@ Click "Calculate Present Value" to see:
 - Gain/loss on your RSUs compared to grant value
 - Total present value of your package
 
-### API Rate Limits
-
-The free Alpha Vantage API has a limit of 25 requests per day. If you hit the rate limit, you can manually enter the stock prices.
-
 ## Technology Stack
 
 - **Framework**: Next.js 14 with App Router (Server-Side Rendering)
@@ -117,7 +96,7 @@ The free Alpha Vantage API has a limit of 25 requests per day. If you hit the ra
 - **Styling**: Tailwind CSS
 - **Runtime**: React 18
 - **Package Manager**: Bun (recommended) or npm/yarn
-- **Stock Data API**: Alpha Vantage (free tier)
+- **Stock Data API**: `yahoo-finance2` (Unofficial Yahoo Finance API)
 
 ## Why Bun?
 
@@ -132,10 +111,9 @@ This project is optimized to work with Bun, offering significant performance imp
 
 ## API Information
 
-This application uses the [Alpha Vantage API](https://www.alphavantage.co/) to fetch real-time and historical Meta stock prices. The free tier includes:
-- 25 API requests per day
-- No credit card required
-- Real-time and historical stock data
+This application uses `yahoo-finance2` to fetch real-time and historical Meta stock prices.
+- **No API Key Required**: Works out of the box.
+- **Privacy**: No user data is sent to third parties (other than the stock symbol requests to Yahoo).
 
 ## Calculation Formula
 
