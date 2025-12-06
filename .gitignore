@@ -1,0 +1,47 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# bun
+# bun.lockb is usually committed if present.
+# bun.lock is the new text-based lockfile (Bun v1.2+).
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+# Ignore accidental '~' directory or backup files
+/~
+*~
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# local env files
+.env
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+.bun/
+
+# IDEs
+.vscode/
+.idea/
