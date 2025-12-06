@@ -1,0 +1,22 @@
+# Bun configuration file
+# https://bun.sh/docs/runtime/bunfig
+
+[install]
+# Optional: specify registry
+registry = "https://registry.npmjs.org/"
+
+# Auto-install peer dependencies
+auto = "auto"
+
+[install.cache]
+# Cache directory for faster subsequent installs
+dir = "~/.bun/install/cache"
+
+[test]
+# Test configuration (for future use)
+preload = []
+
+[run]
+# Shell to use for scripts
+shell = "system"
+
