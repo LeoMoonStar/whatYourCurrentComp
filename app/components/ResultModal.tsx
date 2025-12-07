@@ -10,9 +10,10 @@ interface ResultModalProps {
   result: CalculationResult
   bonusPercentage: string
   avgPrice: string
+  startDate: string
 }
 
-export default function ResultModal({ isOpen, onClose, result, bonusPercentage, avgPrice }: ResultModalProps) {
+export default function ResultModal({ isOpen, onClose, result, bonusPercentage, avgPrice, startDate }: ResultModalProps) {
   const cardRef = useRef<HTMLDivElement>(null)
   const isPositive = result.rsuGainLoss >= 0
 
@@ -102,7 +103,10 @@ export default function ResultModal({ isOpen, onClose, result, bonusPercentage, 
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
               {isPositive ? 'Congratulations!' : "Don't Worry, It's Cyclic"}
             </h2>
-            <p className="text-gray-500 text-lg">
+            <div className="inline-block mt-2 px-4 py-1 bg-gray-100 rounded-full text-sm font-medium text-gray-600">
+               Your offer on Starting date: {startDate}
+            </div>
+            <p className="text-gray-500 text-lg mt-4">
               {isPositive ? "Your package has grown significantly" : "Markets fluctuate. Your package is still strong."}
             </p>
           </div>
