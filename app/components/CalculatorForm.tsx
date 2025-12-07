@@ -2,21 +2,12 @@
 
 import { useState, FormEvent } from 'react'
 import ResultModal from './ResultModal'
-
-export interface CalculationResult {
-  cashComp: number
-  rsuShares: number
-  rsuCurrentValue: number
-  totalPresentValue: number
-  rsuGainLoss: number
-  rsuGainLossPercent: number
-}
-
 import { getStockPrices, getMonthlyAveragePrice } from '../actions/stock'
-
-// ... existing interfaces ...
+import { COMPANIES, Company } from '../lib/companies'
+import { calculatePackage, CalculationResult } from '../lib/calculations'
 
 export default function CalculatorForm() {
+  const [selectedCompany, setSelectedCompany] = useState<Company>(COMPANIES[0])
   const [formData, setFormData] = useState({
     baseSalary: '',
     bonusPercentage: '',
@@ -33,7 +24,6 @@ export default function CalculatorForm() {
   const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = (e: FormEvent) => {
-    // ... existing handleSubmit ...
     e.preventDefault()
     
     const base = parseFloat(formData.baseSalary)
@@ -48,28 +38,15 @@ export default function CalculatorForm() {
       return
     }
 
-    // Calculate based on the formula:
-    // present value = base*(1+bonus percentage) + (rsu/average closing price of previous month)*current stock price
-    
-    const cashComp = base * (1 + bonusPercent)
-    const rsuShares = rsuGrant / avgPrice
-    const rsuCurrentValue = rsuShares * currentPrice / 4
-    const totalPresentValue = cashComp + rsuCurrentValue
-    
-    // Calculate gain/loss based on annual value comparison
-    // rsuGrant is total 4 year amount, so we need to divide by 4 to compare with annual rsuCurrentValue
-    const annualOriginalValue = rsuGrant / 4
-    const rsuGainLoss = rsuCurrentValue - annualOriginalValue
-    const rsuGainLossPercent = (rsuGainLoss / annualOriginalValue) * 100
+    const calcResult = calculatePackage({
+      baseSalary: base,
+      bonusPercentage: bonusPercent,
+      rsuGrantAmount: rsuGrant,
+      avgClosingPrice: avgPrice,
+      currentStockPrice: currentPrice
+    });
 
-    setResult({
-      cashComp,
-      rsuShares,
-      rsuCurrentValue,
-      totalPresentValue,
-      rsuGainLoss,
-      rsuGainLossPercent,
-    })
+    setResult(calcResult)
     setShowModal(true)
   }
 
@@ -86,8 +63,7 @@ export default function CalculatorForm() {
     setError(null)
     
     try {
-      // Hardcoded to META as per project context
-      const data = await getStockPrices('META')
+      const data = await getStockPrices(selectedCompany.ticker)
       
       if (!data) {
         throw new Error('Failed to fetch current price. Please try again.')
@@ -114,7 +90,7 @@ export default function CalculatorForm() {
     setError(null)
     
     try {
-      const averagePrice = await getMonthlyAveragePrice('META', formData.startDate)
+      const averagePrice = await getMonthlyAveragePrice(selectedCompany.ticker, formData.startDate)
       
       if (averagePrice === null) {
         throw new Error('Failed to fetch historical data or calcuate average.')
@@ -140,6 +116,37 @@ export default function CalculatorForm() {
             {error}
           </div>
         )}
+
+        {/* Company Selection Dropdown */}
+        <div className="relative">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Select Company</label>
+          <div className="relative">
+            <select
+              value={selectedCompany.id}
+              onChange={(e) => {
+                const company = COMPANIES.find(c => c.id === e.target.value);
+                if (company) setSelectedCompany(company);
+              }}
+              className="w-full px-4 py-3 pl-14 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none cursor-pointer font-medium text-gray-900"
+            >
+              {COMPANIES.map(comp => (
+                <option key={comp.id} value={comp.id}>
+                  {comp.name} ({comp.ticker})
+                </option>
+              ))}
+            </select>
+            {/* Logo positioned absolutely on the left */}
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+              {selectedCompany.logo}
+            </div>
+            {/* Dropdown arrow */}
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="col-span-1 md:col-span-2">
@@ -254,6 +261,9 @@ export default function CalculatorForm() {
                 {loadingHistorical ? '...' : 'Fetch'}
               </button>
             </div>
+             <p className="mt-1 text-xs text-gray-500">
+              For {selectedCompany.ticker}
+            </p>
           </div>
 
           <div>
@@ -284,6 +294,9 @@ export default function CalculatorForm() {
                 {loadingCurrent ? '...' : 'Fetch'}
               </button>
             </div>
+             <p className="mt-1 text-xs text-gray-500">
+              For {selectedCompany.ticker}
+            </p>
           </div>
         </div>
 
@@ -303,6 +316,7 @@ export default function CalculatorForm() {
           bonusPercentage={formData.bonusPercentage}
           avgPrice={formData.avgClosingPrice}
           startDate={formData.startDate}
+          company={selectedCompany}
         />
       )}
     </>

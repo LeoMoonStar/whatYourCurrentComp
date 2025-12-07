@@ -7,10 +7,10 @@ export default function Home() {
       <div className="w-full max-w-2xl mx-auto">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">
-            Meta Compensation Calculator
+            Big Tech Compensation Calculator
           </h1>
           <p className="text-slate-600 text-lg">
-            Realize the true value of your offer
+            Realize the true value of your offer (Meta, Google, Amazon)
           </p>
         </div>
         
@@ -18,8 +18,8 @@ export default function Home() {
           <div className="bg-blue-600 p-6 sm:p-8 text-white">
             <h2 className="text-xl font-bold mb-2">How it works</h2>
             <p className="text-blue-100 leading-relaxed opacity-90">
-              Your RSUs are calculated using the previous month's average closing price. 
-              We'll help you fetch that historical data automatically to see what your package is worth today.
+              Select your company and enter your details. We'll automatically fetch the 
+              stock data based on your specific start date to show you what your package is really worth today.
             </p>
           </div>
           
